@@ -34,4 +34,12 @@ public class GMCmd : MonoBehaviour
             Debug.Log(reader.GetInt32(reader.GetOrdinal("id")) + reader.GetString(reader.GetOrdinal("name")));
         }
     }
+
+
+
+    [MenuItem("CMCmd/打开背包主界面")]
+    public static void OpenPackagePanel()
+    {
+        UIManager.Instance.OpenPanel(UIConst.PackagePanel);  // 打开背包界面
+    }
 }
