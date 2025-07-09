@@ -39,7 +39,9 @@ public class PackagePanel : BasePanel
 
     private void InitUI()
     {
-        InitUIName();
+        InitUIName();  // 初始化 UI 组件
+
+        InitClick();  // 注册点击事件
     }
 
 
@@ -71,9 +73,11 @@ public class PackagePanel : BasePanel
 
 
     // 添加点击事件
+    // PackagePanel 界面的关闭按钮
     private void OnClickClose()
     {
         print(">>>>> OnClickClose");
+        ClosePanel();
     }
 
 
@@ -99,6 +103,9 @@ public class PackagePanel : BasePanel
         {
             Transform PackageUIItem = Instantiate(PackageUIItemPrefab.transform, scrollContent) as Transform;
             PackageCell packageCell = PackageUIItem.GetComponent<PackageCell>();
+
+            // 刷新这个物品的状态
+            packageCell.Refresh(localData, this);
         }
     }
 }
