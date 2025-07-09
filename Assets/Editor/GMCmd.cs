@@ -35,6 +35,18 @@ public class GMCmd : MonoBehaviour
         }
     }
 
+    //[MenuItem("CMCmd/读取数据库")]
+    //public static void ReadSQL()
+    //{
+    //    SqliteDataReader reader = db_sql.ReaderFullTable("Items");
+    //    while (reader.Read())
+    //    {
+    //        // 读取
+    //        Debug.Log(reader.GetInt32(reader.GetOrdinal("id")) + reader.GetString(reader.GetOrdinal("name")));
+    //    }
+
+    //}
+
 
 
     [MenuItem("CMCmd/打开背包主界面")]

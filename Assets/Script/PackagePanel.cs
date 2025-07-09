@@ -16,12 +16,18 @@ public class PackagePanel : BasePanel
     // Center
     private Transform UICenter;
 
+    // 添加背包子物体预制件属性
+    public GameObject PackageUIItemPrefab;
+
 
 
     override protected void Awake()
     {
         base.Awake();
-        InitUI();
+        InitUI();  // 初始化 UI
+
+        // 初始化背包子物品的预制件
+        InitPrefab();
     }
 
 
@@ -40,6 +46,13 @@ public class PackagePanel : BasePanel
         UICloseBtn = transform.Find("Right/ClosePanel/CloseBtn");
 
         UICenter = transform.Find("Center");
+    }
+
+
+    // 初始化背包子物品的预制件
+    private void InitPrefab()
+    {
+        PackageUIItemPrefab = Resources.Load("Prefab/Panel/Package/PackageUIItem") as GameObject;
     }
 
 
