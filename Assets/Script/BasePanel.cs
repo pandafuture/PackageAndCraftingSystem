@@ -8,6 +8,18 @@ public class BasePanel : MonoBehaviour
     protected new string name;  // 界面的名称
 
 
+    protected virtual void Awake()
+    {
+
+    }
+
+
+    public virtual void SetActive(bool active)
+    {
+        gameObject.SetActive(active);
+    }
+
+
     // 打开界面的方法
     public virtual void OpenPanel(string name)
     {

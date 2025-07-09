@@ -74,6 +74,18 @@ public class UIManager
     }
 
 
+    public BasePanel GetPanel(string name)
+    {
+        BasePanel panel = null;
+        // 检查是否已打开
+        if(panelDict.TryGetValue(name,out panel))
+        {
+            return panel;
+        }
+        return null;
+    }
+
+
     // 打开界面的方法
     public BasePanel OpenPanel(string name)
     {
