@@ -37,6 +37,7 @@ public class DatabaseManager : MonoBehaviour
     }
 
 
+
     // 保存 Unity 与 SQLite 连接的变量
     private SqliteConnection dbConnection;
 
@@ -206,6 +207,7 @@ public class DatabaseManager : MonoBehaviour
         return ExecuteQuery(queryString);
     }
 
+
     // 条件查询表，需要传入表名，要查询的字段，条件字段，条件操作符，条件值
     public SqliteDataReader ReadTable(string tableName, string[] items, string[] colNames, string[] operations, int[] colValues)
     {
@@ -220,5 +222,157 @@ public class DatabaseManager : MonoBehaviour
             queryString += " AND " + colNames[i] + " " + operations[i] + " " + colValues[0] + " ";
         }
         return ExecuteQuery(queryString);
+    }
+
+
+    // 把整张表转换为对象列表，传入表名，行数据转换函数 converter
+    public List<T> GetTableAsList<T>(string tableName,Func<SqliteDataReader, T> converter)
+    {
+        List<T> resultList = new List<T>();
+        using (SqliteDataReader reader = ReaderFullTable(tableName))
+        {
+            while (reader.Read())
+            {
+                try
+                {
+                    resultList.Add(converter(reader));
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"数据转换错误{e.Message}");
+                }
+            }
+        }
+        return resultList;
+    }
+
+
+    // 执行条件查询并转换为对象列表，传入 SQL 查询语句，行数据转换函数 converter
+    public List<T> ExecuteQueryAsList<T>(string query, Func<SqliteDataReader, T> converter)
+    {
+        List<T> resultList = new List<T>();
+
+        using (SqliteDataReader reader = ExecuteQuery(query))
+        {
+            while (reader.Read())
+            {
+                try
+                {
+                    resultList.Add(converter(reader));
+                }
+                catch(Exception e)
+                {
+                    Debug.LogError($"数据转换错误：{e.Message}");
+                }
+            }
+        }
+        return resultList;
+    }
+
+
+    // 根据 ID 获取单个对象
+    public T GetById<T>(string tableName, int id, Func<SqliteDataReader, T> converter, string idColumnName = "id")
+    {
+        string query = $"SELECT * FROM {tableName} WHERE {idColumnName} = @id LIMIT 1";
+
+        try
+        {
+            // 创建命令对象
+            using (var command = dbConnection.CreateCommand())
+            {
+                command.CommandText = query;
+
+                // 添加参数
+                var idParam = command.CreateParameter();
+                idParam.ParameterName = "@id";
+                idParam.Value = id;
+                idParam.DbType = DbType.Int32;
+                command.Parameters.Add(idParam);
+
+                // 执行查询
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        try
+                        {
+                            // 使用转换函数创建对象
+                            return converter(reader);
+                        }
+                        catch(Exception e)
+                        {
+                            Debug.LogError($"数据转换错误：{e.Message}");
+                            return default(T);
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.LogError($"数据库查询错误：{e.Message}");
+        }
+
+        // 未找到记录
+        return default(T);
+    }
+
+
+    // 根据 UID 获取单个对象
+    public T GetByUId<T>(string tableName, int uid, Func<SqliteDataReader, T> converter, string uidColumnName = "uid")
+    {
+        string query = $"SELECT * FROM {tableName} WHERE {uidColumnName} = @uid LIMIT 1";
+
+        try
+        {
+            // 创建命令对象
+            using (var command = dbConnection.CreateCommand())
+            {
+                command.CommandText = query;
+
+                // 添加参数
+                var uidParam = command.CreateParameter();
+                uidParam.ParameterName = "@uid";
+                uidParam.Value = uid;
+                uidParam.DbType = DbType.Int32;
+                command.Parameters.Add(uidParam);
+
+                // 执行查询
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        try
+                        {
+                            // 使用转换函数创建对象
+                            return converter(reader);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError($"数据转换错误：{e.Message}");
+                            return default(T);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"数据库查询错误：{e.Message}");
+        }
+
+        // 未找到记录
+        return default(T);
+    }
+
+
+    // 关闭当前活动的 DataReader
+    public void CloseReader()
+    {
+        if(dataReader != null)
+        {
+            dataReader.Close();
+            dataReader = null;
+        }
     }
 }

@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using Mono.Data.Sqlite;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -35,9 +36,23 @@ public class GameManager : MonoBehaviour
         // 连接数据库
         Connect();
         // 读取 Items 表中第一个数据
-        GetPackageItemById(1);
+        //GetPackageItemById(1);
         // 读取 PackageLocalData 表中的 第一个数据
-        GetPackageLocalDataById(1);
+        //GetPackageLocalDataById(1);
+
+        // 加载静态数据 Items 表
+        //GetPackageTable();
+        // 加载动态数据 PackageLocalItem 表
+        //GetPackageLocalData();
+        PackageLocalItem package = GetPackageLocalDataByUId(1);
+        if (package != null)
+        {
+            Debug.Log($"第一个静态数据获取成功：{package.ID}");
+        }
+        else
+        {
+            Debug.LogWarning($"未找到 uid 为 1 的静态数据");
+        }
 
     }
 
@@ -56,132 +71,135 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // 根据 id 取到 Items 表格指定数据的方法
-    public static void GetPackageItemById(int id)
+    // 加载静态数据 Items 表的方法
+    public List<PackageTableItem> GetPackageTable()
     {
-        // 获取数据库管理器
-        DatabaseManager dbManager = DatabaseManager.Instance;
-
-        // 检查数据库是否已连接
-        if (dbManager == null || dbManager.GetConnectionState() != System.Data.ConnectionState.Open)
-        {
-            Debug.LogError("数据库未连接，请先执行连接数据库");
-            return;
-        }
-
-        // 需要查询的字段
-        string[] items = new string[]
-        {
-            "id",
-            "name",
-            "type",
-            "max_stack",
-            "num",
-            "description",
-            "icon_path"
-        };
-        string[] colNames = new string[]
-        {
-            "id",
-        };
-        string[] operations = new string[]
-        {
-            "="
-        };
-
-        int[] ID = { id };
-
-        // 读取 Items 表
         string tableName = "Items";
-        SqliteDataReader reader = dbManager.ReadTable(tableName, items, colNames, operations, ID);
 
-        if (reader == null)
+        List<PackageTableItem> packageTable = DatabaseManager.Instance.GetTableAsList(tableName, reader =>
         {
-            Debug.LogError("读取表失败");
-            return;
-        }
-
-        // 打印表头
-        string header = "| ";
-        for (int i = 0; i < reader.FieldCount; i++)
-        {
-            header += reader.GetName(i) + " | ";
-        }
-        Debug.Log(header);
-
-        // 逐行读取数据
-        int rowCount = 0;
-        while (reader.Read())
-        {
-            rowCount++;
-            string rowData = "| ";
-            for (int i = 0; i < reader.FieldCount; i++)
+            return new PackageTableItem
             {
-                rowData += reader[i].ToString() + " | ";
-            }
-            Debug.Log(rowData);
-        }
+                id = reader.GetInt32(reader.GetOrdinal("id")),
+                name = reader.GetString(reader.GetOrdinal("name")),
+                type = reader.GetInt32(reader.GetOrdinal("type")),
+                max_stack = reader.GetInt32(reader.GetOrdinal("max_stack")),
+                description = reader.GetString(reader.GetOrdinal("description")),
+                icon_path = reader.GetString(reader.GetOrdinal("icon_path")),
+            };
+        });
 
-        // 关闭读取器
-        reader.Close();
-        Debug.Log($"成功读取表：{tableName}");
+        Debug.Log($"加载了 {packageTable.Count} 个 Items 表数据");
+        foreach(PackageTableItem packageItem in packageTable)
+        {
+            Debug.Log($"id：{packageItem.id}  name：{packageItem.name}  type：{packageItem.type}  max_stack：{packageItem.max_stack}  description：{packageItem.description}  icon_path：{packageItem.icon_path}");
+        }
+        return packageTable;
     }
 
 
-    // 根据 uid 取到 PacakageLocalData 表格指定数据的方法
-    public static void GetPackageLocalDataById(int uid)
+    // 加载动态数据 PackageLocalItem 表的方法
+    public List<PackageLocalItem> GetPackageLocalData()
     {
-        // 获取数据库管理器
-        DatabaseManager dbManager = DatabaseManager.Instance;
-
-        // 检查数据库是否已连接
-        if (dbManager == null || dbManager.GetConnectionState() != System.Data.ConnectionState.Open)
-        {
-            Debug.LogError("数据库未连接，请先执行连接数据库");
-            return;
-        }
-
-        // 需要查询的字段
-        string[] items = new string[]
-        {
-            "uid",
-            "id",
-            "num",
-        };
-        string[] colNames = new string[]
-        {
-            "uid",
-        };
-        string[] operations = new string[]
-        {
-            "="
-        };
-
-        int[] UID = { uid };
-
-        // 读取 PackageLocalData 表
         string tableName = "PackageLocalData";
-        SqliteDataReader reader = dbManager.ReadTable(tableName, items, colNames, operations, UID);
 
-        if (reader == null)
+        List<PackageLocalItem> packageLocalItem = DatabaseManager.Instance.GetTableAsList(tableName, reader =>
         {
-            Debug.LogError("读取表失败");
-            return;
-        }
-        while (reader.Read())
-        {
-            string Data = "";
-            for (int i = 0; i < reader.FieldCount; i++)
+            return new PackageLocalItem
             {
-                Data += reader[i].ToString();
-            }
-            Debug.Log(Data);
-        }
+                UID = reader.GetInt32(reader.GetOrdinal("uid")),
+                ID = reader.GetInt32(reader.GetOrdinal("id")),
+                NUM = reader.GetInt32(reader.GetOrdinal("num")),
+            };
+        });
 
-        // 关闭读取器
-        reader.Close();
-        Debug.Log($"成功读取表：{tableName}");
+        Debug.Log($"加载了 {packageLocalItem.Count} 个 PackageLocalItem 表数据");
+        foreach(PackageLocalItem packageItem in packageLocalItem)
+        {
+            Debug.Log($"UID：{packageItem.UID}  ID：{packageItem.ID}  NUM：{packageItem.NUM}");
+        }
+        return packageLocalItem;
+    }
+
+    // 根据 id 取到 Items 表格指定数据对象的方法
+    public PackageTableItem GetPackageItemById(int id)
+    {
+        return DatabaseManager.Instance.GetById<PackageTableItem>(
+            tableName: "Items",
+            id: id,
+            converter: reader => new PackageTableItem
+            {
+                id = reader.GetInt32(reader.GetOrdinal("id")),
+                name = reader.GetString(reader.GetOrdinal("name")),
+                type = reader.GetInt32(reader.GetOrdinal("type")),
+                max_stack = reader.GetInt32(reader.GetOrdinal("max_stack")),
+                description = reader.GetString(reader.GetOrdinal("description")),
+                icon_path = reader.GetString(reader.GetOrdinal("icon_path")),
+            }
+        );
     }
 
 
+    // 根据 uid 取到 PacakageLocalData 表格指定数据对象的方法
+    public PackageLocalItem GetPackageLocalDataByUId(int uid)
+    {
+        return DatabaseManager.Instance.GetByUId<PackageLocalItem>(
+            tableName: "PackageLocalData",
+            uid: uid,
+            converter: reader => new PackageLocalItem
+            {
+                UID = reader.GetInt32(reader.GetOrdinal("uid")),
+                ID = reader.GetInt32(reader.GetOrdinal("id")),
+                NUM = reader.GetInt32(reader.GetOrdinal("num")),
+            }
+        );
+    }
+
+
+    // 获取背包物品并进行排序的方法
+    public List<PackageLocalItem> GetSortPackageLocalData()
+    {
+        List<PackageLocalItem> localItems = GetPackageLocalData();
+        localItems.Sort(new PackageItemComparer());
+        return localItems;
+    }
+}
+
+
+// 排序规则
+public class PackageItemComparer : IComparer<PackageLocalItem>
+{
+    public int Compare(PackageLocalItem a, PackageLocalItem b)
+    {
+        PackageTableItem x = GameManager.Instance.GetPackageItemById(a.ID);
+        PackageTableItem y = GameManager.Instance.GetPackageItemById(b.ID);
+        // 按照物品类型
+        int typeComparison = y.type.CompareTo(x.type);
+        if(typeComparison == 0)
+        {
+            return b.ID.CompareTo(a.ID);
+        }
+        return typeComparison;
+    }
+}
+
+
+// 定义静态数据，用于加载
+public class PackageTableItem
+{
+    public int id {  get; set; }
+    public string name {  get; set; }
+    public int type {  get; set; }
+    public int max_stack { get; set; }
+    public string description {  get; set; }
+    public string icon_path { get; set; }
+}
+
+
+// 定义本地背包物品模型，用于加载
+public class PackageLocalItem
+{
+    public int UID { get; set; }
+    public int ID { get; set; }
+    public int NUM { get; set; }
 }

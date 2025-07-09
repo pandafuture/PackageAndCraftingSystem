@@ -15,6 +15,7 @@ public class PackagePanel : BasePanel
 
     // Center
     private Transform UICenter;
+    private Transform UIScrollView;
 
     // 添加背包子物体预制件属性
     public GameObject PackageUIItemPrefab;
@@ -28,6 +29,11 @@ public class PackagePanel : BasePanel
 
         // 初始化背包子物品的预制件
         InitPrefab();
+    }
+
+    private void Start()
+    {
+        RefreshUI();  // UI 刷新方法
     }
 
 
@@ -46,6 +52,7 @@ public class PackagePanel : BasePanel
         UICloseBtn = transform.Find("Right/ClosePanel/CloseBtn");
 
         UICenter = transform.Find("Center");
+        UIScrollView = transform.Find("Center/Scroll View");
     }
 
 
@@ -67,5 +74,31 @@ public class PackagePanel : BasePanel
     private void OnClickClose()
     {
         print(">>>>> OnClickClose");
+    }
+
+
+    // UI 刷新方法
+    private void RefreshUI()
+    {
+        RefreshScroll();  // 刷新滚动容器
+    }
+
+
+    // 刷新滚动容器的方法
+    private void RefreshScroll()
+    {
+        // 先清理滚动容器中原本的物品
+        RectTransform scrollContent = UIScrollView.GetComponent<ScrollRect>().content;
+        for (int i = 0; i < scrollContent.childCount; i++)
+        {
+            Destroy(scrollContent.GetChild(i).gameObject);
+        }
+
+        // 根据本地数据初始化滚动容器
+        foreach(PackageLocalItem localData in GameManager.Instance.GetSortPackageLocalData())
+        {
+            Transform PackageUIItem = Instantiate(PackageUIItemPrefab.transform, scrollContent) as Transform;
+            PackageCell packageCell = PackageUIItem.GetComponent<PackageCell>();
+        }
     }
 }
