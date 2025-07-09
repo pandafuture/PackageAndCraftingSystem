@@ -30,6 +30,13 @@ public class DatabaseManager : MonoBehaviour
     }
 
 
+    // 辅助外部使用单例
+    public ConnectionState GetConnectionState()
+    {
+        return (dbConnection != null) ? dbConnection.State : ConnectionState.Closed;
+    }
+
+
     // 保存 Unity 与 SQLite 连接的变量
     private SqliteConnection dbConnection;
 
@@ -108,7 +115,7 @@ public class DatabaseManager : MonoBehaviour
 
 
     // 向指定数据表中插入一行数据，传入表名，和新增的表数据
-    public SqliteDataReader InserValues(string tableName,string[] values)
+    public SqliteDataReader InsertValues(string tableName,string[] values)
     {
         // 获取数据表中字段数目
         int fieldCount = ReaderFullTable(tableName).FieldCount;
