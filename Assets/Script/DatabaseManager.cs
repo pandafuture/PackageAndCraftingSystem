@@ -207,7 +207,7 @@ public class DatabaseManager : MonoBehaviour
     }
 
     // 条件查询表，需要传入表名，要查询的字段，条件字段，条件操作符，条件值
-    public SqliteDataReader ReadTable(string tableName, string[] items, string[] colNames, string[] operations, string[] colValues)
+    public SqliteDataReader ReadTable(string tableName, string[] items, string[] colNames, string[] operations, int[] colValues)
     {
         string queryString = "SELECT " + items[0];
         for(int i = 1; i < items.Length; i++)
