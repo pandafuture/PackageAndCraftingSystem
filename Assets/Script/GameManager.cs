@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using Mono.Data.Sqlite;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // 主动打开背包界面
-        UIManager.Instance.OpenPanel(UIConst.PackagePanel);
+        //UIManager.Instance.OpenPanel(UIConst.PackagePanel);
 
 
 
@@ -44,15 +45,21 @@ public class GameManager : MonoBehaviour
         //GetPackageTable();
         // 加载动态数据 PackageLocalItem 表
         //GetPackageLocalData();
-        PackageLocalItem package = GetPackageLocalDataByUId(1);
-        if (package != null)
-        {
-            Debug.Log($"第一个静态数据获取成功：{package.ID}");
-        }
-        else
-        {
-            Debug.LogWarning($"未找到 uid 为 1 的静态数据");
-        }
+        //PackageLocalItem package = GetPackageLocalDataByUId(1);
+        //if (package != null)
+        //{
+        //    Debug.Log($"第一个静态数据获取成功：{package.ID}");
+        //}
+        //else
+        //{
+        //    Debug.LogWarning($"未找到 uid 为 1 的静态数据");
+        //}
+
+        //List<PackageTableItem> packagetypeitems = GetPackageTableByType(1);
+        //foreach (PackageTableItem packageItem in packagetypeitems)
+        //{
+        //    Debug.Log($"id：{packageItem.id}  name：{packageItem.name}  description：{packageItem.description}");
+        //}
 
     }
 
@@ -121,6 +128,7 @@ public class GameManager : MonoBehaviour
         return packageLocalItem;
     }
 
+
     // 根据 id 取到 Items 表格指定数据对象的方法
     public PackageTableItem GetPackageItemById(int id)
     {
@@ -163,6 +171,24 @@ public class GameManager : MonoBehaviour
         localItems.Sort(new PackageItemComparer());
         return localItems;
     }
+
+
+    // 根据存储物品类型来获取不同类型所有数据的方法   材料：1    武器：2    弹药：3
+    public List<PackageTableItem> GetPackageTableByType(int type)
+    {
+        List<PackageTableItem> packageItems = new List<PackageTableItem>();
+        foreach(PackageTableItem packageItem in GetPackageTable())
+        {
+            if(packageItem.type == type)
+            {
+                packageItems.Add(packageItem);
+            }
+        }
+        return packageItems;
+    }
+
+
+
 }
 
 
@@ -202,4 +228,18 @@ public class PackageLocalItem
     public int UID { get; set; }
     public int ID { get; set; }
     public int NUM { get; set; }
+}
+
+
+// 存储物品类型的常量表
+public class GameConst
+{
+    // 材料类型常量
+    public const int PackageTypeMaterial = 1;
+
+    // 武器类型常量
+    public const int PackageTypeWeapom = 2;
+
+    // 弹药类型常量
+    public const int PackageTypeAmmo = 3;
 }

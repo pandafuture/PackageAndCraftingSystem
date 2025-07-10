@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PackageCell : MonoBehaviour
+
+// 继承 点击、进入、退出回调方法的接口
+public class PackageCell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     // 添加物品 UI 属性
     private Transform UIIcon;
@@ -55,4 +58,28 @@ public class PackageCell : MonoBehaviour
         // 物品的数量
         UINum.GetComponent<Text>().text = this.packageLocalData.NUM.ToString();
     }
+
+
+    // 实现鼠标点击的回调方法
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerClick：" + eventData.ToString());
+    }
+
+
+    // 实现鼠标进入的回调方法
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerEnter：" + eventData.ToString());
+    }
+
+
+    // 实现鼠标退出的回调方法
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("OnPointerExit：" + eventData.ToString());
+    }
+
+
+
 }

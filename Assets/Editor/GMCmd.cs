@@ -232,4 +232,10 @@ public class GMCmd : MonoBehaviour
     {
         UIManager.Instance.OpenPanel(UIConst.PackagePanel);  // 打开背包界面
     }
+
+    [MenuItem("CMCmd/打开合成界面")]
+    public static void OpenCraftingPanel()
+    {
+        UIManager.Instance.OpenPanel(UIConst.CraftingPanel);  // 打开合成界面
+    }
 }

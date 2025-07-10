@@ -55,6 +55,9 @@ public class UIManager
         {
             // 配置 PackagePanel 对应的路径
             {UIConst.PackagePanel, "Package/PackagePanel" },
+
+            // 配置 CraftingPanel 对应的路径
+            {UIConst.CraftingPanel, "Crafting/CraftingPanel" },
         };
     }
 
@@ -155,4 +158,7 @@ public class UIConst
 {
     // 新增 PackagePanel 常量
     public const string PackagePanel = "PackagePanel";
+
+    // 新增 CraftingPanel 常量
+    public const string CraftingPanel = "CraftingPanel";
 }

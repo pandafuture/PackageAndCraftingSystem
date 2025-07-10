@@ -85,12 +85,15 @@ public class PackagePanel : BasePanel
     private void RefreshUI()
     {
         RefreshScroll();  // 刷新滚动容器
+
     }
 
 
     // 刷新滚动容器的方法
     private void RefreshScroll()
     {
+        int packagecellnum = 0;  // 背包格使用计数器 
+
         // 先清理滚动容器中原本的物品
         RectTransform scrollContent = UIScrollView.GetComponent<ScrollRect>().content;
         for (int i = 0; i < scrollContent.childCount; i++)
@@ -106,6 +109,11 @@ public class PackagePanel : BasePanel
 
             // 刷新这个物品的状态
             packageCell.Refresh(localData, this);
+            packagecellnum++;
         }
+
+
+        // 刷新背包格
+        UIPackageText.GetComponent<Text>().text = "背包（" + packagecellnum + "/30）";
     }
 }

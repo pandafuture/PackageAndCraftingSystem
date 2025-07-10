@@ -14,6 +14,7 @@ public class BasePanel : MonoBehaviour
     }
 
 
+    // 界面开关
     public virtual void SetActive(bool active)
     {
         gameObject.SetActive(active);
