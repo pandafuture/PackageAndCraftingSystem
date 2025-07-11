@@ -101,19 +101,42 @@ public class PackagePanel : BasePanel
             Destroy(scrollContent.GetChild(i).gameObject);
         }
 
-        // 根据本地数据初始化滚动容器
-        foreach(PackageLocalItem localData in GameManager.Instance.GetSortPackageLocalData())
+        // 创建 30 个背包格
+        for(int i = 0; i < 30; i++)
         {
             Transform PackageUIItem = Instantiate(PackageUIItemPrefab.transform, scrollContent) as Transform;
             PackageCell packageCell = PackageUIItem.GetComponent<PackageCell>();
 
-            // 刷新这个物品的状态
-            packageCell.Refresh(localData, this);
-            packagecellnum++;
+            // 检查当前格是否有物品
+            if(i < GameManager.Instance.GetSortPackageLocalData().Count)
+            {
+                // 刷新这个物品的状态
+                packageCell.Refresh(GameManager.Instance.GetSortPackageLocalData()[i], this);
+                packagecellnum++;
+            }
+            else
+            {
+                // 空格状态
+                packageCell.SetEmpty();
+            }
         }
-
 
         // 刷新背包格
         UIPackageText.GetComponent<Text>().text = "背包（" + packagecellnum + "/30）";
+
+        //// 根据本地数据初始化滚动容器
+        //foreach(PackageLocalItem localData in GameManager.Instance.GetSortPackageLocalData())
+        //{
+        //    Transform PackageUIItem = Instantiate(PackageUIItemPrefab.transform, scrollContent) as Transform;
+        //    PackageCell packageCell = PackageUIItem.GetComponent<PackageCell>();
+
+        //    // 刷新这个物品的状态
+        //    packageCell.Refresh(localData, this);
+        //    packagecellnum++;
+        //}
+
+
+        //// 刷新背包格
+        //UIPackageText.GetComponent<Text>().text = "背包（" + packagecellnum + "/30）";
     }
 }

@@ -14,6 +14,9 @@ public class PackageCell : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
     private Transform UINum;
     private Transform UISelect;
 
+    private Transform UIZhuangbeikuang;
+    private Transform UIEmpty;
+
 
     private PackageLocalItem packageLocalData;  // 当前物品的动态数据
     private PackageTableItem packageTableItem;  // 当前物品的静态数据
@@ -34,12 +37,24 @@ public class PackageCell : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         UIIconName = transform.Find("Item/Bottom/IconName");
         UINum = transform.Find("Item/Top/Num");
         UISelect = transform.Find("Item/Select");
+
+        UIZhuangbeikuang = transform.Find("Item/zhuangbeikuang");
+        UIEmpty = transform.Find("Item/Empty");
     }
 
 
     // 刷新物品状态的方法
     public void Refresh(PackageLocalItem packageLcoalData, PackagePanel uiParent)
     {
+        // 确保物品 UI 可见
+        UIIcon.gameObject.SetActive(true);
+        UIIconName.gameObject.SetActive(true);
+        UINum.gameObject.SetActive(true);
+        UIZhuangbeikuang.gameObject.SetActive(true);
+        UIEmpty.gameObject.SetActive(false);
+        this.enabled = true;
+
+
         // 数据初始化
         this.packageLocalData = packageLcoalData;
         this.packageTableItem = GameManager.Instance.GetPackageItemById(packageLocalData.ID);
@@ -57,6 +72,23 @@ public class PackageCell : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
         // 物品的数量
         UINum.GetComponent<Text>().text = this.packageLocalData.NUM.ToString();
+    }
+
+
+    // 设置空格状态的方法
+    public void SetEmpty()
+    {
+        // 隐藏物品相关 UI
+        UIIcon.gameObject.SetActive(false);
+        UIIconName.gameObject.SetActive(false);
+        UINum.gameObject.SetActive(false);
+        UIZhuangbeikuang.gameObject.SetActive(false);
+
+        // 显示空格图片
+        UIEmpty.gameObject.SetActive(true);
+
+        // 禁用交互
+        this.enabled = false;
     }
 
 

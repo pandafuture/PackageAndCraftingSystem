@@ -225,6 +225,8 @@ public class DatabaseManager : MonoBehaviour
     }
 
 
+
+
     // 把整张表转换为对象列表，传入表名，行数据转换函数 converter
     public List<T> GetTableAsList<T>(string tableName,Func<SqliteDataReader, T> converter)
     {

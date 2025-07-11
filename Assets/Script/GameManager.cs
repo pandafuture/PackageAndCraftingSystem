@@ -178,8 +178,16 @@ public class GameManager : MonoBehaviour
     // 根据 id 获取背包中某一物品数量的方法
     public int GetItemCount(int itemId)
     {
-        PackageLocalItem item = GetPackageLocalData().Find(i => i.ID == itemId);
-        return item?.NUM ?? 0;
+        int total = 0;
+        List<PackageLocalItem> items = GetPackageLocalData();
+        foreach(var item in items)
+        {
+            if(item.ID == itemId)
+            {
+                total += item.NUM;
+            }
+        }
+        return total;
     }
 
 
@@ -464,7 +472,7 @@ public class PackageItemComparer : IComparer<PackageLocalItem>
         int typeComparison = y.type.CompareTo(x.type);
         if(typeComparison == 0)
         {
-            return b.ID.CompareTo(a.ID);
+            return a.ID.CompareTo(b.ID);
         }
         return typeComparison;
     }

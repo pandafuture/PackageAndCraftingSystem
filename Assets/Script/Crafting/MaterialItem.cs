@@ -31,6 +31,9 @@ public class MaterialItem : MonoBehaviour
     {
         PackageTableItem itemData = GameManager.Instance.GetPackageItemById(itemId);
 
+        // 获取物品总数量
+        int totalCount = GameManager.Instance.GetItemCount(itemId);
+
         // 更新图片
         Texture2D t = (Texture2D)Resources.Load(itemData.icon_path);
         Debug.Log("图片路径为：" + itemData.icon_path);
@@ -38,7 +41,7 @@ public class MaterialItem : MonoBehaviour
         UIIcon.GetComponent<Image>().sprite = temp;
 
         // 跟新名称和数量
-        UIConditionText.GetComponent<Text>().text = $"{currentCount}/{requiredCount} {itemData.name}";
+        UIConditionText.GetComponent<Text>().text = $"{totalCount}/{requiredCount} {itemData.name}";
 
         // 设置颜色（不足时为红色）
         Color ziti = UIConditionText.GetComponent<Text>().color;

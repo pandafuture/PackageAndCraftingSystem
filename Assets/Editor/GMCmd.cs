@@ -188,16 +188,22 @@ public class GMCmd : MonoBehaviour
     [MenuItem("CMCmd/创建背包测试数据")]
     public static void CreateLocalPackageData()
     {
-        // 添加 100 个生铁
-        GameManager.Instance.AddItem(1, 100);
-        // 添加 100 个木头
-        GameManager.Instance.AddItem(2, 100);
-        // 添加 100 个胶带
-        GameManager.Instance.AddItem(3, 100);
-        // 添加 100 个麻绳
-        GameManager.Instance.AddItem(4, 100);
-        // 添加 100 个羽毛
-        GameManager.Instance.AddItem(5, 100);
+        // 添加 50 个生铁
+        GameManager.Instance.AddItem(1, 50);
+        // 添加 50 个木头
+        GameManager.Instance.AddItem(2, 50);
+        // 添加 50 个胶带
+        GameManager.Instance.AddItem(3, 50);
+        // 添加 50 个麻绳
+        GameManager.Instance.AddItem(4, 50);
+        // 添加 50 个羽毛
+        GameManager.Instance.AddItem(5, 50);
+        // 添加 2 个 铁弓
+        GameManager.Instance.AddItem(6, 2);
+        // 添加 2 个 铁刀
+        GameManager.Instance.AddItem(7, 2);
+        // 添加 50 个羽毛箭
+        GameManager.Instance.AddItem(8, 2);
 
 
         //// 获取数据库管理器

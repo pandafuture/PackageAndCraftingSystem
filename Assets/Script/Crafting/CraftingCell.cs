@@ -8,14 +8,14 @@ public class CraftingCell : MonoBehaviour,IPointerClickHandler, IPointerEnterHan
 {
     // 添加 UI 属性
     private Transform UIItem;
-    private Transform UISelect;
+    public Transform UISelect;
     private Transform UIBottom;
     private Transform UIIconName;
     private Transform UICenter;
     private Transform UIIcon;
 
     private PackageLocalItem PackageLocalData;  // 当前物品的动态数据
-    private PackageTableItem packageTableData;  // 当前物品的静态数据
+    public PackageTableItem packageTableData;  // 当前物品的静态数据
     private CraftingPanel uiParent;  // 当前物品的父物品（CraftingPanel)
 
 

@@ -96,6 +96,9 @@ public class CraftingPanel : BasePanel
     private void RefreshUI()
     {
         RefreshScroll();  // 刷新滚动容器
+
+        // 延迟一帧后选择第一个物品
+        StartCoroutine(SelectFirstItemDelayed());
     }
 
     // 刷新滚动容器的方法
@@ -124,6 +127,28 @@ public class CraftingPanel : BasePanel
 
             // 刷新这个物品的状态
             craftingCell.Refresh(Item, this);
+        }
+    }
+
+
+    // 延迟选择第一个物品
+    private IEnumerator SelectFirstItemDelayed()
+    {
+        // 等待一帧，确保所有 UI 元素都已创建
+        yield return null;
+
+        // 获取滚动容器中所有物品单元格
+        RectTransform scrollContent = UIScrollView.GetComponent<ScrollRect>().content;
+        if(scrollContent.childCount > 0)
+        {
+            // 获取第一个单元格
+            CraftingCell firstCell = scrollContent.GetChild(0).GetComponent<CraftingCell>();
+
+            // 直接设置父面板的选中 ID
+            chooseID = firstCell.packageTableData.id;
+
+            // 选中效果
+            firstCell.UISelect.gameObject.SetActive (true);
         }
     }
 
