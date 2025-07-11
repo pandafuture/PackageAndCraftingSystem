@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2527398956516614030}
   - component: {fileID: 2777751637537091482}
   - component: {fileID: 8543692285350654228}
+  - component: {fileID: 5687270905789628272}
   m_Layer: 5
   m_Name: ConditionUIItem
   m_TagString: Untagged
@@ -77,6 +78,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5687270905789628272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171017634932135835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4565252521c64db459e541b8c91a4675, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2344556520556785145
 GameObject:
   m_ObjectHideFlags: 0
